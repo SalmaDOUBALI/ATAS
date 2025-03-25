@@ -9,213 +9,215 @@
             margin: 0;
             background: url('fond.jpg') no-repeat center center fixed;
             background-size: cover;
-            overflow: hidden;
             text-align: center;
             font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
-        h1 {
-            position: absolute;
-            color: #1f99e6;
-            top: -20px; /* Titre repositionné à la même hauteur que le logo */
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 4em;
-            z-index: 1;
-            text-shadow: 3px 3px 5px rgba(3, 51, 209, 0.5)
+        .header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
         }
 
         .logo {
             position: absolute;
-            top: 20px;
             left: 20px;
-            width: 200px;
+            width: 100px;
             height: auto;
-            z-index: 1;
         }
 
-        .avatar-container, .container-aveugle, .container-ufr {
-            position: absolute;
-            top: 60%;
-            transform: translateY(-50%);
-            padding: 20px;
-            border: 5px solid #87CEFA;
+        h1 {
+            font-size: 3vw; /* Taille relative à l'écran */
+            color: #1f99e6;
+            text-shadow: 3px 3px 5px rgba(3, 51, 209, 0.5);
+        }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .box {
+            flex: 1;
+            min-width: 280px;
+            max-width: 350px;
+            height: 450px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 3px solid #87CEFA;
             border-radius: 15px;
             box-shadow: 0 0 15px rgba(0, 0, 255, 0.6);
-            z-index: 1;
-            width: 300px;
-            height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
         }
 
-        .avatar-container { left: 6%; }
-        .container-aveugle { left: 37%; }
-        .container-ufr { left: 68%; }
-
-        #avatar3D {
+        .box img {
             width: 100%;
-            height: 90%;
-        }
-
-        .container-aveugle img, .container-ufr img, .avatar-container h2 {
-            width: 100%;
-            height: 90%;
+            max-height: 300px;
             object-fit: contain;
         }
 
-        .avatar-container h2 {
-            font-size: 1.5em;
-            color: #000000; /* Texte noir */
-            margin-top: 20px; /* Espacement du texte par rapport à l'avatar */
+        .box h2 {
+            font-size: 1.2em;
+            color: #000;
+            margin-top: 10px;
         }
 
+        #avatar3D {
+            width: 100%;
+            height: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .logo {
+                position: static;
+                width: 80px;
+                margin-bottom: 10px;
+            }
+
+            h1 {
+                font-size: 5vw;
+            }
+
+            .content {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Logo -->
-    <img src="ATAS.png" alt="Logo de l'entreprise" class="logo">
-
-    <!-- Titre principal -->
-    <h1>Welcome to ATAS!</h1>
-
-    <!-- Conteneur de l'avatar -->
-    <div class="avatar-container">
-        <div id="avatar3D"></div>
-        <h2>signe Langage</h2> <!-- Texte ajouté en noir dans le conteneur de l'avatar -->
+    <div class="header">
+        <img src="ATAS.png" alt="Logo de l'entreprise" class="logo">
+        <h1>Welcome to ATAS!</h1>
     </div>
 
-    <!-- Conteneur Assistance Vocale -->
-    <div class="container-aveugle">
-        <img src="vocal.png" alt="voice assistance">
-        <h2>voice assistance</h2>
-    </div>
+    <div class="content">
+        <div class="box">
+            <div id="avatar3D"></div>
+            <h2>Langage des signes</h2>
+        </div>
 
-    <!-- Conteneur Parcours UFR -->
-    <div class="container-ufr">
-        <img src="ufr.jpg" alt="UFR route">
-        <h2>UFR route</h2>
-    </div>
+        <div class="box">
+            <img src="vocal.png" alt="voice assistance">
+            <h2>Assistance vocale</h2>
+        </div>
 
-    <!-- Audio de bienvenue -->
-    <audio id="audioBienvenue">
-        <source src="welcome.mp3" type="audio/mp3">
-        Votre navigateur ne supporte pas l'audio.
-    </audio>
+        <div class="box">
+            <img src="ufr.jpg" alt="UFR route">
+            <h2>Parcours UFR</h2>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/three@0.130.1/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.130.1/examples/js/loaders/GLTFLoader.js"></script>
 
     <script>
-        // Initialisation de la scène, de la caméra et du rendu
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(400, 500); // Dimensions du rendu
-        document.getElementById('avatar3D').appendChild(renderer.domElement); // Attacher le rendu à la div
+        renderer.setSize(300, 300);
+        document.getElementById('avatar3D').appendChild(renderer.domElement);
 
-        // Lumières
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // Augmentation de l'intensité de la lumière ambiante
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
         scene.add(ambientLight);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // Augmentation de l'intensité de la lumière directionnelle
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.set(5, 5, 5);
         scene.add(directionalLight);
 
         let mixer;
-        let avatarModel;
-
-        // Chargement de l'avatar
         const loader = new THREE.GLTFLoader();
         loader.load('sourd_muet.glb', function (gltf) {
-            avatarModel = gltf.scene;
+            const avatarModel = gltf.scene;
             scene.add(avatarModel);
+            avatarModel.scale.set(1.5, 1.5, 1.5);
+            avatarModel.position.set(0, -1, 0);
 
-            // Réduction de la taille de l'avatar
-            avatarModel.scale.set(10, 3.42, 3); // Avatar plus grand
-            avatarModel.position.set(-1.5, -1.5, 0); // Ajuste la position de l'avatar dans le conteneur
+            camera.position.set(0, 1, 3);
 
-            // Fixer l'avatar pour qu'il ne tourne pas
-            avatarModel.rotation.set(0.15, 0.05, 0);
-
-            // Gestion des animations si présentes
             if (gltf.animations.length > 0) {
                 mixer = new THREE.AnimationMixer(avatarModel);
                 gltf.animations.forEach((clip) => mixer.clipAction(clip).play());
             }
 
-            // Fixe la caméra sur une position immobile
-            camera.position.set(0, 1.5, 5);
-
             function animate() {
                 requestAnimationFrame(animate);
-                if (mixer) mixer.update(0.01); // Animation de l'avatar sans rotation
+                if (mixer) mixer.update(0.01);
                 renderer.render(scene, camera);
             }
             animate();
         });
 
-        // Mise à jour lors du redimensionnement de la fenêtre
         window.addEventListener('resize', function () {
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            camera.aspect = window.innerWidth / window.innerHeight;
+            renderer.setSize(300, 300);
+            camera.aspect = 1;
             camera.updateProjectionMatrix();
         });
 
-        // Fonction pour jouer l'audio
-        let audio = document.getElementById('audioBienvenue');
-        let audioPlayed = false; // Variable pour vérifier si l'audio a déjà été joué
+        let audio = new Audio('welcome.mp3');
+        let audioPlayed = false;
 
         function playAudio() {
-            if (!audioPlayed) { // Vérifier si l'audio n'a pas déjà été joué
+            if (!audioPlayed) {
                 audio.play();
-                audio.loop = false; // Désactiver la boucle pour gérer manuellement la répétition
-                audioPlayed = true; // Marquer que l'audio a été joué
+                audioPlayed = true;
             }
         }
 
-        // Détecter le mouvement du curseur pour jouer l'audio
         document.addEventListener('mousemove', playAudio);
 
-        // Re-jouer l'audio après 5 secondes une fois qu'il est terminé
         audio.addEventListener('ended', function() {
             setTimeout(() => {
-                audio.play(); // Relance la lecture après 5 secondes
-            }, 10000); // 10000ms = 10 secondes
+                audio.play();
+            }, 10000);
         });
 
-        // Fonction pour initialiser la reconnaissance vocale
         function startSpeechRecognition() {
             let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.lang = 'fr-FR'; // Langue : Français
-            recognition.interimResults = false; // Ne pas afficher les résultats en temps réel
-            recognition.maxAlternatives = 1; // Maximum de 1 alternative pour ne pas avoir trop de résultats
-
-            // Fonction pour démarrer la reconnaissance vocale
+            recognition.lang = 'fr-FR';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
             recognition.start();
 
-            // Lorsque de la parole est détectée, vérifier si c'est "OK"
             recognition.onresult = function(event) {
-                var transcript = event.results[0][0].transcript.toLowerCase(); // Récupérer ce qui a été dit
-                console.log("Reconnaissance vocale : " + transcript);
-
+                var transcript = event.results[0][0].transcript.toLowerCase();
                 if (transcript === "ok") {
-                    window.location.href = 'page1.html'; // Rediriger vers page1
+                    window.location.href = 'page1.html';
                 }
             };
 
-            // Gérer les erreurs de la reconnaissance vocale
             recognition.onerror = function(event) {
                 console.error("Erreur de reconnaissance vocale : ", event.error);
             };
 
-            // Redirection vers page2.html au clic sur le conteneur UFR
-            document.querySelector('.container-ufr').addEventListener('click', function () {
+            document.querySelector('.box:nth-child(3)').addEventListener('click', function () {
                 window.location.href = 'page2.html';
             });
-
         }
 
-        // Démarrer la reconnaissance vocale après la fin de l'audio
         audio.addEventListener('ended', startSpeechRecognition);
     </script>
 
